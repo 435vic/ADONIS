@@ -1,14 +1,8 @@
-function onKeyDown(event) {
-    
-}
+const socket = io();
 
-function onKeyUp(event) {
-
-}
-
-function onControlSignal(event) {
-    console.log(event.type, event.target)
-}
+socket.on("connect", () => {
+    console.log("Connected")
+});
 
 window.onload = () => {
     document.addEventListener('keydown', onKeyDown)
@@ -20,5 +14,19 @@ window.onload = () => {
         control.addEventListener('mousedown', onControlSignal)
         control.addEventListener('mouseup', onControlSignal)
     }
+
+    console.log("Connecting")
+}
+
+function onKeyDown(event) {
+    
+}
+
+function onKeyUp(event) {
+
+}
+
+function onControlSignal(event) {
+    console.log(event.type, event.target)
 }
 
