@@ -10,7 +10,7 @@ class Camera:
 
 class PiCamera(Camera):
     def setup(self):
-        self.camera = Picamera2
+        self.camera = Picamera2()
         self.camera.configure(
             self.camera.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)})
         )
