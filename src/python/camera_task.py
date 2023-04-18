@@ -26,7 +26,7 @@ def camera_task():
         cv2.imshow('Preview', frame)
         _, img = cv2.imencode('.jpg', frame)
         sio.emit('frame', (img.tobytes(), {'hello': 'world'}), namespace='/camera')
-        if args.framerate < 30:
+        if int(args.framerate) < 30:
             sio.sleep(1 / int(args.framerate))
 
     print('Camera task stopped')

@@ -19,14 +19,11 @@ const camera_task = spawn('python', [
     path.join(dirname(), 'python', 'camera_task.py'),
     '-f', '12'
 ], {
-    stdio: 'pipe'
+    stdio: ['pipe', 'pipe', 'inherit']
 });
+
 camera_task.stdout.on('data', data => {
     logger.info(`[camera-task] ${data}`);
-});
-camera_task.stderr.on('data', data => {
-    // Bypass logger, so it's easier to read and interpret errors
-    console.log(`[camera-task] ${data}`);
 });
 
 const commands: any = {
