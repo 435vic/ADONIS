@@ -14,7 +14,7 @@ args = parser.parse_args()
 
 sio = socketio.Client()
 
-camera: Camera = Webcam if not args.raspi else PiCamera
+camera: Camera = Webcam() if not args.raspi else PiCamera()
 
 stop_flag = Event()
 def camera_task():

@@ -24,6 +24,9 @@ const camera_task = spawn('python', [
 camera_task.stdout.on('data', data => {
     logger.info(`[camera-task] ${data}`);
 });
+camera_task.stderr.on('data', data => {
+    logger.error(`[camera-task] ${data}`);
+});
 
 const commands: any = {
     'ping': () => logger.info('[console] pong'),
