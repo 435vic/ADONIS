@@ -45,14 +45,21 @@ export class SocketServer {
                 'Content-Type': 'multipart/x-mixed-replace; boundary=frame',
             });
 
-            this.camsocket?.on('frame', (data: Buffer, annotations?: any) => {
+            const callback = (data: Buffer, annotations?: any) => {
+                if (!res.writable) {
+                    logger.debug('Connection to client for stream has been cancelled');
+                    this.camsocket?.off('frame', callback);
+                    next();
+                    return;
+                }
                 res.write('--frame\r\n');
                 res.write('Content-Type: image/jpeg\r\n');
                 res.write(`Content-Length: ${data.length}\r\n\r\n`);
                 res.write(data);
                 res.write('\r\n');
-            });
-    
+            };
+
+            this.camsocket?.on('frame', callback);
             next();
         });
     }

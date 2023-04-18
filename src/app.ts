@@ -32,6 +32,8 @@ const commands: any = {
         logger.info('[console] shutting down...');
         camera_task.stdin.write('\r\n');
         camera_task.stdin.end();
+        server.sio.disconnectSockets(true);
+        server.sio.close();
         server.httpServer.close();
         rl.close();
         process.exit(0);
