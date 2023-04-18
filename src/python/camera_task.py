@@ -2,19 +2,19 @@ import cv2
 import argparse
 import socketio
 from threading import Event
-from camera import Webcam, PiCamera, Camera
+from camera import Webcam, PiCamera, Camera, raspiEnabled
 
 parser = argparse.ArgumentParser(description='Manage a webcam and process with OpenCV.')
 
 parser.add_argument('-f', '--framerate', nargs='?', default=30)
 parser.add_argument('-p', '--port', nargs='?', default=8085)
-parser.add_argument('--raspi', action='store_true')
 
 args = parser.parse_args()
 
 sio = socketio.Client()
 
-camera: Camera = Webcam() if not args.raspi else PiCamera()
+if raspiEnabled: print('Running in RasPi mode')
+camera: Camera = Webcam() if not raspiEnabled else PiCamera()
 
 stop_flag = Event()
 def camera_task():
@@ -26,7 +26,8 @@ def camera_task():
         cv2.imshow('Preview', frame)
         _, img = cv2.imencode('.jpg', frame)
         sio.emit('frame', (img.tobytes(), {'hello': 'world'}), namespace='/camera')
-        sio.sleep(1 / int(args.framerate))
+        if args.framerate < 30:
+            sio.sleep(1 / int(args.framerate))
 
     print('Camera task stopped')
 
@@ -48,7 +49,6 @@ def on_replace():
 
 sio.connect(f'http://localhost:{args.port}', namespaces='/camera')
 camera_worker = sio.start_background_task(camera_task)
-print('Press enter to quit... ')
 input()
 stop_flag.set()
 sio.disconnect()
