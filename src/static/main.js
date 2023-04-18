@@ -2,6 +2,9 @@ const socket = io();
 
 socket.on("connect", () => {
     console.log("Connected")
+    socket.emit('ping', res => {
+        console.log(`Got response from ping: ${res}`)
+    });
 });
 
 window.onload = () => {
@@ -28,5 +31,8 @@ function onKeyUp(event) {
 
 function onControlSignal(event) {
     console.log(event.type, event.target)
+    socket.emit('control', event.target.id, {
+        type: event.type
+    });
 }
 

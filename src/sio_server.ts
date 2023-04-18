@@ -22,12 +22,17 @@ export class SocketServer {
         this.app.use('/', express.static(path.join(dirname(), 'static')))
         this.httpServer = httpServer ?? http.createServer(this.app);
         this.sio = new io.Server(this.httpServer);
+
+        this.sio.on('connection', socket => {
+            logger.debug(`Client connection from ${socket.id}`);
+            this.registerEvents(socket);
+        });
+
         this.nspcam = this.sio.of('/camera');
         this.nspcam.on('connection', (socket) => {
             logger.debug(`Camera socket connection from ${socket.id}`)
             this.camsocket?.emit('disconnect-replaced');
             this.camsocket?.disconnect(true);
-            this.registerCamEvents(socket)
             this.camsocket = socket;
         });
 
@@ -64,6 +69,18 @@ export class SocketServer {
         });
     }
 
+    registerEvents(socket: io.Socket) {
+        socket.on('ping', (callback) => {
+            logger.debug(`Ping from client`);
+            callback('pong');
+        });
+
+        socket.on('control', (id: string, data?: any) => {
+            logger.debug(`Control command ${id} ${JSON.stringify(data)}`)
+            // Serial stuff: send command, etc
+        });
+    }
+
     async start() {
         await new Promise((resolve) => {
             this.httpServer.listen(this.port, () => {
@@ -71,8 +88,5 @@ export class SocketServer {
                 resolve(this.httpServer);
             });
         });
-    }
-
-    registerCamEvents(socket: io.Socket) {
     }
 }
