@@ -2,22 +2,26 @@ import cv2
 import argparse
 import socketio
 from threading import Event
+from camera import Webcam, PiCamera, Camera
 
 parser = argparse.ArgumentParser(description='Manage a webcam and process with OpenCV.')
 
 parser.add_argument('-f', '--framerate', nargs='?', default=30)
 parser.add_argument('-p', '--port', nargs='?', default=8085)
+parser.add_argument('--raspi', action='store_true')
 
 args = parser.parse_args()
 
 sio = socketio.Client()
 
+camera: Camera = Webcam if not args.raspi else PiCamera
+
 stop_flag = Event()
 def camera_task():
-    cap = cv2.VideoCapture(0)
+    camera.setup()
     while not stop_flag.is_set():
         cv2.waitKey(1)
-        ret, frame = cap.read()
+        ret, frame = camera.get_frame()
         if not ret: continue
         cv2.imshow('Preview', frame)
         _, img = cv2.imencode('.jpg', frame)
