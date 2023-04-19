@@ -2,6 +2,7 @@ import cv2
 
 from time import sleep
 from sklearn.cluster import DBSCAN
+from camera import Webcam, PiCamera, Camera, raspiEnabled
 
 kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(4,4))
 
@@ -86,10 +87,11 @@ class VideoProcessor:
 
 if __name__ == '__main__':
     pr = VideoProcessor()
-    cap = cv2.VideoCapture(0)
+    camera: Camera = Webcam() if not raspiEnabled else PiCamera()
+    camera.setup()
     print('Opened video')
     while True:
-        ret, frame = cap.read()
+        ret, frame = camera.get_frame()
         if not ret: continue
         pr.process(frame)
         cv2.imshow('PREVIEW', frame)
