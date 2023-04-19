@@ -25,10 +25,10 @@ def camera_task():
         cv2.waitKey(1)
         ret, frame = camera.get_frame()
         if not ret: continue
-        cv2.imshow('Preview', frame)
         _, img = cv2.imencode('.jpg', frame)
         if sio.connected:
-            data = processor.process(frame)
+            pf, data = processor.process(frame)
+            cv2.imshow('Preview', pf)
             sio.emit('frame', (img.tobytes(), data), namespace='/camera')
         if int(args.framerate) < 30:
             sio.sleep(1 / int(args.framerate))

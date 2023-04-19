@@ -51,12 +51,6 @@ export class SocketServer {
             });
 
             const callback = (data: Buffer, annotations?: any) => {
-                if (!res.writable) {
-                    logger.debug('Connection to client for stream has been cancelled');
-                    this.camsocket?.off('frame', callback);
-                    next();
-                    return;
-                }
                 this.sio.emit('frame-meta', annotations);
                 res.write('--frame\r\n');
                 res.write('Content-Type: image/jpeg\r\n');
@@ -66,6 +60,11 @@ export class SocketServer {
             };
 
             this.camsocket?.on('frame', callback);
+            res.on('close', () => {
+                logger.debug('Client stream closed');
+                this.camsocket?.off('frame', callback);
+                res.end();
+            });
             next();
         });
     }

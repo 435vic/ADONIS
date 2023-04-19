@@ -37,7 +37,7 @@ class VideoProcessor:
             # Dilate to make grouping easier
             diff = cv2.dilate(diff, kernel)
             # Take the threshold of the image to binarize it
-            _, thresh = cv2.threshold(diff, 20, 255, cv2.THRESH_BINARY)
+            _, thresh = cv2.threshold(diff, 50, 255, cv2.THRESH_BINARY)
             # Find contours
             contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             # Skip processing if no contours are found
@@ -46,11 +46,12 @@ class VideoProcessor:
                 rects = []
                 for c in contours:
                     x, y, w, h = cv2.boundingRect(c)
+                    cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 1)
                     rects.append((x, y, w, h))
                 pts = [(x + w//2, y + h//2) for x, y, w, h in rects]
 
                 # Clustering
-                clustering = DBSCAN(eps=40, min_samples=5).fit(pts)
+                clustering = DBSCAN(eps=60, min_samples=1).fit(pts)
                 # Merge the rectangles within each cluster
                 groups = {}
                 for i, label in enumerate(clustering.labels_):
@@ -72,6 +73,9 @@ class VideoProcessor:
                     1
                 )
 
+                for x, y, w, h in rects:
+                    cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), thickness=2)
+
                 for x, y, w, h in rect_groups:
                     cv2.rectangle(frame, (x, y), (w, h), (0, 0, 255), thickness=3)
 
@@ -83,7 +87,7 @@ class VideoProcessor:
 
         self.prev_frame = src
         self.cnt += 1
-        return out
+        return frame, out
 
 if __name__ == '__main__':
     pr = VideoProcessor()
