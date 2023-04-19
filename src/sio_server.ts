@@ -57,6 +57,7 @@ export class SocketServer {
                     next();
                     return;
                 }
+                this.sio.emit('frame-meta', annotations);
                 res.write('--frame\r\n');
                 res.write('Content-Type: image/jpeg\r\n');
                 res.write(`Content-Length: ${data.length}\r\n\r\n`);

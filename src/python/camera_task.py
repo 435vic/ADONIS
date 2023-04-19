@@ -3,6 +3,7 @@ import argparse
 import socketio
 from threading import Event
 from camera import Webcam, PiCamera, Camera, raspiEnabled
+from processor import VideoProcessor
 
 parser = argparse.ArgumentParser(description='Manage a webcam and process with OpenCV.')
 
@@ -18,6 +19,7 @@ camera: Camera = Webcam() if not raspiEnabled else PiCamera()
 
 stop_flag = Event()
 def camera_task():
+    processor = VideoProcessor()
     camera.setup()
     while not stop_flag.is_set():
         cv2.waitKey(1)
@@ -26,7 +28,8 @@ def camera_task():
         cv2.imshow('Preview', frame)
         _, img = cv2.imencode('.jpg', frame)
         if sio.connected:
-            sio.emit('frame', (img.tobytes(), {'hello': 'world'}), namespace='/camera')
+            data = processor.process(frame)
+            sio.emit('frame', (img.tobytes(), data), namespace='/camera')
         if int(args.framerate) < 30:
             sio.sleep(1 / int(args.framerate))
 
