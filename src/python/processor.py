@@ -37,7 +37,7 @@ class VideoProcessor:
             # Dilate to make grouping easier
             diff = cv2.dilate(diff, kernel)
             # Take the threshold of the image to binarize it
-            _, thresh = cv2.threshold(diff, 50, 255, cv2.THRESH_BINARY)
+            _, thresh = cv2.threshold(diff, 40, 255, cv2.THRESH_BINARY)
             # Find contours
             contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             # Skip processing if no contours are found

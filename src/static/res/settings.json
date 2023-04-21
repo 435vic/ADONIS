@@ -1,0 +1,26 @@
+{
+    "controls": {
+        "actions": [
+            {
+                "name": "Up",
+                "id": "move-up",
+                "key": ["w", "ArrowUp"]
+            },
+            {
+                "name": "Down",
+                "id": "move-down",
+                "key": ["s", "ArrowDown"]
+            },
+            {
+                "name": "Left",
+                "id": "turn-left",
+                "key": ["a", "a"]
+            },
+            {
+                "name": "Right",
+                "id": "turn-right",
+                "key": ["w", "d"]
+            }
+        ]
+    }
+}

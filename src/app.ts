@@ -17,7 +17,7 @@ await server.start();
 logger.info('Starting camera task');
 const camera_task = spawn('python', [
     path.join(dirname(), 'python', 'camera_task.py'),
-    '-f', '12'
+    '-f', '15'
 ], {
     stdio: ['pipe', 'pipe', 'inherit']
 });
