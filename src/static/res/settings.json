@@ -2,24 +2,24 @@
     "controls": {
         "actions": [
             {
+                "name": "Left",
+                "id": "turn-left",
+                "key": "a"
+            },
+            {
                 "name": "Up",
                 "id": "move-up",
-                "key": ["w", "ArrowUp"]
+                "key": "w"
             },
             {
                 "name": "Down",
                 "id": "move-down",
-                "key": ["s", "ArrowDown"]
-            },
-            {
-                "name": "Left",
-                "id": "turn-left",
-                "key": ["a", "a"]
+                "key": "s"
             },
             {
                 "name": "Right",
                 "id": "turn-right",
-                "key": ["w", "d"]
+                "key": "d"
             }
         ]
     }

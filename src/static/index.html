@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet"> 
     <script src="lib/socket.io.min.js"></script>
     <script src="lib/jquery-3.6.4.min.js"></script>
     <script src="main.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css"/>
     <title>Interface</title>
 </head>
 <body>
@@ -15,11 +18,8 @@
         
         <div class="main-stream-container">
             <img src="stream" alt="Robot Video Stream" id="main-stream" onerror="this.onerror = null; this.src='res/capybara.jpg'">
-            <div id="stream-annotation-0" class="stream-annotation" style="width:50px;height:50px"></div>
-            <!-- <img id="main-stream" src="res/dreamland.jpg" alt="Thumbnail"> -->
         </div>
-        <div class="controls-container">
-        </div>
+        <div class="controls-container"></div>
     </div>
 </body>
 </html>

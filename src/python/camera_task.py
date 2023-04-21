@@ -6,10 +6,8 @@ from camera import Webcam, PiCamera, Camera, raspiEnabled
 from processor import VideoProcessor
 
 parser = argparse.ArgumentParser(description='Manage a webcam and process with OpenCV.')
-
 parser.add_argument('-f', '--framerate', nargs='?', default=30)
 parser.add_argument('-p', '--port', nargs='?', default=8085)
-
 args = parser.parse_args()
 
 sio = socketio.Client()
@@ -50,10 +48,10 @@ def on_replace():
     stop_flag.set()
     raise Exception('Client has been replaced. Did you start another instance of this script?')
 
-
-sio.connect(f'http://localhost:{args.port}', namespaces='/camera')
-camera_worker = sio.start_background_task(camera_task)
-input()
-stop_flag.set()
-sio.disconnect()
-camera_worker.join()
+if __name__ == '__main__':
+    sio.connect(f'http://localhost:{args.port}', namespaces='/camera')
+    camera_worker = sio.start_background_task(camera_task)
+    input()
+    stop_flag.set()
+    sio.disconnect()
+    camera_worker.join()

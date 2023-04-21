@@ -82,6 +82,7 @@ body {
   min-height: 100vh;
   justify-content: center;
   align-items: center;
+  font-family: 'Roboto', sans-serif;
 }
 
 /*
@@ -118,5 +119,9 @@ TODO:
 .stream-annotation {
   position: absolute;
   top: 0px;
+  outline: 2px solid red;
+}
+
+.control.pressed {
   outline: 2px solid red;
 }
