@@ -23,6 +23,6 @@ if __name__ == '__main__':
     ser.reset_input_buffer();
     conn = ReaderThread(ser, SerialManager)
     conn.start()
-    conn._connection_made.wait()
+    proto = conn.connect()
     time.sleep(5)
 
