@@ -35,6 +35,15 @@ export class SocketServer {
             this.camsocket?.disconnect(true);
             this.camsocket = socket;
         });
+        
+        this.nspserial = this.sio.of('/serial');
+        this.nspserial.on('connection', (socket) => {
+            logger.debug(`Serial socket connection from ${socket.id}`);
+            socket.on('serial-rx', data => {
+                logger.trace(`serial: ${data}`);
+            });
+        });
+        
 
         this.app.get('/stream', (req, res, next) => {
             if (!this.camsocket?.connected) {
@@ -78,6 +87,7 @@ export class SocketServer {
         socket.on('control', (id: string, data?: any) => {
             logger.debug(`Control command ${id} ${JSON.stringify(data)}`)
             // Serial stuff: send command, etc
+            this.sio.emit('');
         });
     }
 

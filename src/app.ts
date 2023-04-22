@@ -16,7 +16,7 @@ const server = new SocketServer();
 await server.start();
 logger.info('Starting camera task');
 const camera_task = spawn('python', [
-    path.join(dirname(), 'python', 'camera_task.py'),
+    path.join(dirname(), 'python', 'hw_manager.py'),
     '-f', '15'
 ], {
     stdio: ['pipe', 'pipe', 'inherit']
