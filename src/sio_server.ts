@@ -87,16 +87,16 @@ export class SocketServer {
 
         socket.on('control', (id: string, data?: any) => {
             logger.debug(`Control command ${id} ${JSON.stringify(data)}`)
-            let command;
-            if (data.type == 'mousedown') {
+            let command = 'M,0,0';
+            if (data.type == 'mouseup') {
                 command == 'M,0,0'
             } else if (id == 'control-move-up') {
                 command = 'M,50,50'
             } else if (id == 'control-move-down') {
-                command = 'M,40,40'
-            } else if (id == 'control-move-left') {
+                command = 'M,-40,-40'
+            } else if (id == 'control-turn-left') {
                 command = 'M,-22,22'
-            } else if (id == 'control-move-right') {
+            } else if (id == 'control-turn-right') {
                 command = 'M,22,-22'
             }
             this.nspserial.emit('serial-tx', command);
