@@ -21,6 +21,7 @@ class CameraManager(Thread):
         while not self.stop_flag.is_set():
             cv2.waitKey(1)
             ret, frame = self.camera.get_frame()
+            frame = cv2.flip(frame, 0)
             if not ret: continue
             _, img = cv2.imencode('.jpg', frame)
             if self.socket.connected:

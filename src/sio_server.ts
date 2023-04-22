@@ -95,6 +95,10 @@ export class SocketServer {
             logger.debug(`${dir}: ${command}`);
             this.nspserial.emit('serial-tx', command);
         });
+
+        socket.on('serial-tx', (command) => {
+            this.nspserial.emit('serial-tx', command);
+        });
     }
 
     async start() {

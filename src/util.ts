@@ -49,19 +49,19 @@ export class MovementManager {
         let sideA = 0;
         let sideB = 0;
         if (this.directions.up) {
-            sideA += this.fSpeed;
-            sideB += this.fSpeed;
+            sideA -= this.fSpeed;
+            sideB -= this.fSpeed;
         } else if (this.directions.down) {
-            sideA -= this.bSpeed;
-            sideB -= this.bSpeed;
+            sideA += this.bSpeed;
+            sideB += this.bSpeed;
         }
 
         if (this.directions.right) {
-            sideA += this.tSpeed;
-            sideB -= this.tSpeed;
-        } else if (this.directions.left) {
             sideA -= this.tSpeed;
             sideB += this.tSpeed;
+        } else if (this.directions.left) {
+            sideA += this.tSpeed;
+            sideB -= this.tSpeed;
         }
 
         return `M,${sideA},${sideB}`
