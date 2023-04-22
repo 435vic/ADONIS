@@ -78,10 +78,10 @@ class CameraManager(Thread):
     # stop_flag.set()
     # raise Exception('Client has been replaced. Did you start another instance of this script?')
 
-if __name__ == '__main__':
-    sio.connect(f'http://localhost:{args.port}', namespaces='/hwmgr')
-    camera_worker = sio.start_background_task(camera_task)
-    input()
-    stop_flag.set()
-    sio.disconnect()
-    camera_worker.join()
+# if __name__ == '__main__':
+#     sio.connect(f'http://localhost:{args.port}', namespaces='/hwmgr')
+#     camera_worker = sio.start_background_task(camera_task)
+#     input()
+#     stop_flag.set()
+#     sio.disconnect()
+#     camera_worker.join()

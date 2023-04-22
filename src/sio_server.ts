@@ -14,6 +14,7 @@ export class SocketServer {
     app: express.Express;
     port: number;
     nspcam: io.Namespace;
+    nspserial: io.Namespace;
     camsocket?: io.Socket;
 
     constructor(port = 8085, httpServer?: http.Server) {
@@ -86,12 +87,19 @@ export class SocketServer {
 
         socket.on('control', (id: string, data?: any) => {
             logger.debug(`Control command ${id} ${JSON.stringify(data)}`)
-            // Serial stuff: send command, etc
-            if (id == 'control-move-up') {
-                this.nspserial.emit('serial-tx', (data.type == 'mousedown') ? 'M,50,50' : 'M,0,0');
+            let command;
+            if (data.type == 'mousedown') {
+                command == 'M,0,0'
+            } else if (id == 'control-move-up') {
+                command = 'M,50,50'
             } else if (id == 'control-move-down') {
-                this.nspserial.emit('serial-tx', (data.type == 'mousedown') ? 'M,-50,-50' : 'M,0,0');
+                command = 'M,40,40'
+            } else if (id == 'control-move-left') {
+                command = 'M,-22,22'
+            } else if (id == 'control-move-right') {
+                command = 'M,22,-22'
             }
+            this.nspserial.emit('serial-tx', command);
         });
     }
 

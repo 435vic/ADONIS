@@ -24,7 +24,7 @@ def connect_error(data):
 @sio.on('disconnect-replaced', namespace='/camera')
 def on_replace():
     print('Client has been replaced. Stopping camera task...')
-    stop_flag.set()
+    camera_worker.stop()
     raise Exception('Client has been replaced. Did you start another instance of this script?')
     
 @sio.on('serial-tx', namespace='/serial')
