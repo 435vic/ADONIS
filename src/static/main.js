@@ -8,13 +8,7 @@ const socket = io();
 $(document).ready(() => {
     stream = $('#main-stream');
     streamContainer = $('.main-stream-container');
-
-    streamWidth = stream.width();
-    streamHeight= stream.height();
-    containerWidth = streamContainer.width();
-    containerHeight = streamContainer.height();
-    streamOriginX = (containerWidth - streamWidth)/2;
-    streamOriginY = (containerHeight - streamHeight)/2;
+    getStreamDimensions();
 
     createControls();
 
@@ -28,6 +22,15 @@ $(document).ready(() => {
 
     socket.on('frame-meta', processFrameMeta);
 });
+
+function getStreamDimensions() {
+    streamWidth = stream.width();
+    streamHeight= stream.height();
+    containerWidth = streamContainer.width();
+    containerHeight = streamContainer.height();
+    streamOriginX = (containerWidth - streamWidth)/2;
+    streamOriginY = (containerHeight - streamHeight)/2;
+}
 
 
 async function getSettings() {
@@ -66,6 +69,9 @@ function onAction(event) {
 }
 
 function processFrameMeta(data) {
+    if (!streamWidth || !streamHeight) {
+        getStreamDimensions();
+    }
     const rects = data.motion;
     let rectIndex = 0;
     for (rectIndex = 0; rectIndex < rects.length; rectIndex++) {
