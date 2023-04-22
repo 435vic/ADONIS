@@ -25,7 +25,7 @@ class CameraManager(Thread):
             _, img = cv2.imencode('.jpg', frame)
             if self.socket.connected:
                 pf, data = processor.process(frame)
-                cv2.imshow('Preview', pf)
+                # cv2.imshow('Preview', pf)
                 self.socket.emit('frame', (img.tobytes(), data), namespace='/camera')
             if int(self.framerate) < 30:
                 sleep(1/self.framerate)
