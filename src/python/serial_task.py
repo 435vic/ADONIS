@@ -3,7 +3,8 @@ import traceback
 from serial.threaded import LineReader, ReaderThread
 import time
 
-SERIAL_PORT = '/dev/ttyACM1'
+# TODO: serial port detector and error handling
+SERIAL_PORT = '/dev/ttyACM0'
 
 class AsyncSerialHandler(LineReader):
     def __init__(self, socket):
