@@ -20,9 +20,10 @@ class SerialManager(LineReader):
 
 if __name__ == '__main__':
     ser = serial.Serial(SERIAL_PORT)
-    ser.reset_input_buffer();
+    ser.reset_input_buffer()
     conn = ReaderThread(ser, SerialManager)
     conn.start()
     proto = conn.connect()
     time.sleep(5)
+    conn.close()
 
