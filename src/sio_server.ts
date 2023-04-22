@@ -3,7 +3,7 @@ import path from "path";
 import express from "express";
 import logger from "./logger.js";
 import * as io from "socket.io";
-import { dirname, filename } from "./util.js";
+import { dirname, MovementManager, Direction } from "./util.js";
 
 // MJPEG stream
 // https://www.phind.com/search?cache=1708aa2a-dee9-48b2-87cb-61323a0672ee&init=true
@@ -15,6 +15,7 @@ export class SocketServer {
     port: number;
     nspcam: io.Namespace;
     nspserial: io.Namespace;
+    botMovement: MovementManager;
     camsocket?: io.Socket;
 
     constructor(port = 8085, httpServer?: http.Server) {
@@ -23,6 +24,7 @@ export class SocketServer {
         this.app.use('/', express.static(path.join(dirname(), 'static')))
         this.httpServer = httpServer ?? http.createServer(this.app);
         this.sio = new io.Server(this.httpServer);
+        this.botMovement = new MovementManager();
 
         this.sio.on('connection', socket => {
             logger.debug(`Client connection from ${socket.id}`);
@@ -86,19 +88,11 @@ export class SocketServer {
         });
 
         socket.on('control', (id: string, data?: any) => {
-            logger.debug(`Control command ${id} ${JSON.stringify(data)}`)
-            let command = 'M,0,0';
-            if (data.type == 'mouseup') {
-                command == 'M,0,0'
-            } else if (id == 'control-move-up') {
-                command = 'M,50,50'
-            } else if (id == 'control-move-down') {
-                command = 'M,-40,-40'
-            } else if (id == 'control-turn-left') {
-                command = 'M,-22,22'
-            } else if (id == 'control-turn-right') {
-                command = 'M,22,-22'
-            }
+            const dir = id.split('-')[2]
+            this.botMovement.processMovementEvent(dir as Direction, data.type == 'mouseup');
+
+            const command = this.botMovement.getCommand();
+            logger.debug(`${dir}: ${command}`);
             this.nspserial.emit('serial-tx', command);
         });
     }
