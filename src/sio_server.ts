@@ -87,7 +87,11 @@ export class SocketServer {
         socket.on('control', (id: string, data?: any) => {
             logger.debug(`Control command ${id} ${JSON.stringify(data)}`)
             // Serial stuff: send command, etc
-            this.sio.emit('');
+            if (id == 'control-move-up') {
+                this.nspserial.emit('serial-tx', (data.type == 'mousedown') ? 'M,50,50' : 'M,0,0');
+            } else if (id == 'control-move-down') {
+                this.nspserial.emit('serial-tx', (data.type == 'mousedown') ? 'M,-50,-50' : 'M,0,0');
+            }
         });
     }
 

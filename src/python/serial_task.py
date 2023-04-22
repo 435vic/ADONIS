@@ -54,14 +54,12 @@ class SerialManager:
         self.proto = self.reader_thread.connect()[1]
         self.alive = True
     
-    def write(self, data: String):
-        self.proto.write(data.encode());
+    def write(self, data):
+        self.proto.write_line(data);
     
     def stop(self):
         self.reader_thread.close()
         self.alive = False
-    
-    
 
 if __name__ == '__main__':
     manager = SerialManager(None)

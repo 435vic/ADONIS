@@ -29,6 +29,7 @@ def on_replace():
     
 @sio.on('serial-tx', namespace='/serial')
 def on_serial_tx(data):
+	print(f'Transmitting {data}') 
 	serial_manager.write(data)
 
 sio.connect(f'http://localhost:{args.port}', namespaces=['/camera', '/serial'])
