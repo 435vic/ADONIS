@@ -34,4 +34,4 @@ while True:
         line = ser.readline().strip()
         print(line)
         sio.emit('serial-tx', line.decode('utf-8'))
-    except KeyboardInterrupt: break
+    except Exception: break
