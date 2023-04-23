@@ -15,7 +15,7 @@ for p in comports():
     device_ids = m[0]
     if device_ids[0].upper() in ARDUINO_VIDS or 'arduino' in p.description.lower():
         print(f'found arduino on port {p.name}')
-        SERIAL_PORT = p.name if 'COM' in p.name else f'/dev/tty/{p.name}'
+        SERIAL_PORT = p.name if 'COM' in p.name else f'/dev/{p.name}'
 if SERIAL_PORT == '':
     print('Could not find arduino board. Defaulting to /dev/ttyACM0...')
     SERIAL_PORT = '/dev/ttyACM0'
