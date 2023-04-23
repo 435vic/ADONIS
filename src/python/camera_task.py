@@ -27,7 +27,11 @@ class CameraManager(Thread):
             if self.socket.connected:
                 pf, data = processor.process(frame)
                 # cv2.imshow('Preview', pf)
-                self.socket.emit('frame', (img.tobytes(), data), namespace='/camera')
+                try:
+                    self.socket.emit('frame', (img.tobytes(), data), namespace='/camera')
+                except Exception as e:
+                    print(f'Exception while sending frame: {e}')
+                    return
             if int(self.framerate) < 30:
                 sleep(1/self.framerate)
         print('Camera task stopped.')
