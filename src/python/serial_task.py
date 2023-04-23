@@ -19,8 +19,7 @@ class AsyncSerialHandler(LineReader):
         self.socket.emit('serial-rx', data, namespace='/serial')
 
     def connection_lost(self, exc):
-        if exc:
-            traceback.print_exc(exc)
+        if exc: print(exc)
         print('serial port closed')
         
     @staticmethod
