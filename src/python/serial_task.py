@@ -58,7 +58,7 @@ class SerialManager:
             self.ser.open()
             self.open = True
         except Exception as e:
-            print('EXCEPTION while opening serial port')
+            print('EXCEPTION while opening serial port: {e}')
             self.open = False
             return
             # TODO: error handling
@@ -76,6 +76,7 @@ class SerialManager:
         self.proto.write_line(data)
     
     def stop(self):
+        if not self.open: return
         self.reader_thread.close()
         self.alive = False
 
