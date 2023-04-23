@@ -16,15 +16,17 @@ export class SocketServer {
     nspcam: io.Namespace;
     nspserial: io.Namespace;
     botMovement: MovementManager;
+    ccc?: (input: string) => void;
     camsocket?: io.Socket;
 
-    constructor(port = 8085, httpServer?: http.Server) {
+    constructor(consoleCommandCallback ?: (input: string) => void, port = 8085, httpServer?: http.Server) {
         this.port = port;
         this.app = express();
         this.app.use('/', express.static(path.join(dirname(), 'static')))
         this.httpServer = httpServer ?? http.createServer(this.app);
         this.sio = new io.Server(this.httpServer);
         this.botMovement = new MovementManager();
+        this.ccc = consoleCommandCallback;
 
         this.sio.on('connection', socket => {
             logger.debug(`Client connection from ${socket.id}`);
@@ -84,7 +86,9 @@ export class SocketServer {
     registerEvents(socket: io.Socket) {
         socket.on('ping', (callback) => {
             logger.debug(`Ping from client`);
-            callback('pong');
+            if (callback) {
+                callback('pong');
+            }
         });
 
         socket.on('control', (id: string, data?: any) => {
@@ -99,6 +103,15 @@ export class SocketServer {
         socket.on('serial-tx', (command) => {
             this.nspserial.emit('serial-tx', command);
         });
+
+        if (this.ccc != null) {
+
+            socket.on('console-command', (input: string) => {
+                if (!this.ccc) return;
+                logger.warn(`Running console command from client: ${input}`);
+                this.ccc(input);
+            });
+        }
     }
 
     async start() {

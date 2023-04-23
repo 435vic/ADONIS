@@ -1,10 +1,24 @@
 import serial
 import traceback
+import re
 from serial.threaded import LineReader, ReaderThread
+from serial.tools.list_ports import comports
 import time
 
+ARDUINO_VIDS = ['2341', '2A03']
+
 # TODO: serial port detector and error handling
-SERIAL_PORT = '/dev/ttyACM0'
+SERIAL_PORT = ''
+for p in comports():
+    m = re.findall('VID:PID=([A-F0-9]{4}):([A-F0-9]{4})', p.hwid)
+    if not m: continue
+    device_ids = m[0]
+    if device_ids[0].upper() in ARDUINO_VIDS or 'arduino' in p.description.lower():
+        print(f'found arduino on port {p.name}')
+        SERIAL_PORT = p.name
+if SERIAL_PORT == '':
+    print('Could not find arduino board. Defaulting to /dev/ttyACM0...')
+    SERIAL_PORT = '/dev/ttyACM0'
 
 class AsyncSerialHandler(LineReader):
     def __init__(self, socket):
@@ -37,13 +51,16 @@ class SerialManager:
         self.alive = False
         self.reader_thread = None
         self.proto = None
+        self.open = False
     
     def start(self):
         try:
             self.ser.open()
+            self.open = True
         except Exception as e:
             print('EXCEPTION while opening serial port')
-            raise e
+            self.open = False
+            return
             # TODO: error handling
         self.ser.reset_input_buffer()
         self.reader_thread = ReaderThread(
@@ -55,7 +72,8 @@ class SerialManager:
         self.alive = True
     
     def write(self, data):
-        self.proto.write_line(data);
+        if not self.open: return
+        self.proto.write_line(data)
     
     def stop(self):
         self.reader_thread.close()
