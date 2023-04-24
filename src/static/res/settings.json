@@ -1,25 +1,71 @@
 {
     "controls": {
+        "groups": ["move", "slider"],
         "actions": [
             {
                 "name": "Left",
                 "id": "turn-left",
-                "key": "a"
+                "key": "a",
+                "group": "move",
+                "text": false,
+                "click": true
             },
             {
                 "name": "Up",
                 "id": "move-up",
-                "key": "w"
+                "key": "w",
+                "group": "move",
+                "text": false,
+                "click": true
             },
             {
                 "name": "Down",
                 "id": "move-down",
-                "key": "s"
+                "key": "s",
+                "group": "move",
+                "text": false,
+                "click": true
             },
             {
                 "name": "Right",
                 "id": "turn-right",
-                "key": "d"
+                "key": "d",
+                "group": "move",
+                "text": false,
+                "click": true
+            },
+            {
+                "name": "Support Leg",
+                "id": "support-leg",
+                "group": "slider",
+                "text": true,
+                "click": false,
+                "html": {
+                    "tag": "input",
+                    "attributes": {
+                        "type": "range",
+                        "min": "0",
+                        "max": "100",
+                        "value": "0",
+                        "orient": "vertical"
+                    }
+                }
+            },
+            {
+                "name": "Camera",
+                "id": "camera-pan",
+                "group": "slider",
+                "text": true,
+                "click": false,
+                "html": {
+                    "tag": "input",
+                    "attributes": {
+                        "type": "range",
+                        "min": "0",
+                        "max": "100",
+                        "value": "50"
+                    }
+                }
             }
         ]
     }

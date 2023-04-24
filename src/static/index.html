@@ -11,13 +11,16 @@
     <script src="lib/socket.io.min.js"></script>
     <script src="lib/jquery-3.6.4.min.js"></script>
     <script src="main.js"></script>
+    <script src="gamepad.js"></script>
     <title>Interface</title>
 </head>
 <body>
     <div class="dashboard-main">
         
         <div class="main-stream-container">
-            <img src="stream" alt="Robot Video Stream" id="main-stream" onerror="this.onerror = null; this.src='res/capybara.jpg'">
+            <div class="stream-container">
+                <img src="stream" alt="Robot Video Stream" id="main-stream" onerror="this.onerror = null; this.src='res/capybara.jpg'">
+            </div>
         </div>
         <div class="controls-container"></div>
     </div>

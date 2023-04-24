@@ -24,8 +24,8 @@ $(document).ready(() => {
 });
 
 function getStreamDimensions() {
-    streamWidth = stream.width();
-    streamHeight= stream.height();
+    streamWidth = stream.get(0).naturalWidth;
+    streamHeight= stream.get(0).naturalHeight;
     containerWidth = streamContainer.width();
     containerHeight = streamContainer.height();
     streamOriginX = (containerWidth - streamWidth)/2;
@@ -47,18 +47,59 @@ async function createControls() {
         console.log(`Failed to get config: ${err}`);
         return;
     });
-    for (let action of config.controls.actions) {
-        const button = $('<button>', {
-            id: `control-${action.id}`,
-            'class': 'control'
+    for (let groupName of config.controls.groups) {
+        const group = $('<div>', {
+            id: `control-group-${groupName}`,
+            'class': 'control-group'
         });
-        button.appendTo('.controls-container');
-        button.text(action.name);
-        button.on('mousedown', onAction);
-        button.on('mouseup', onAction);
+        group.appendTo('.controls-container');
+    }
+
+    for (let action of config.controls.actions) {
+        const tag = action.html?.tag ? action.html.tag : 'button'
+        const $element = $(`<${tag}>`, {
+            id: `control-${action.id}`,
+            'class': action.group ? `control control-group-${action.group}` : 'control',
+            ...(action.html?.attributes ? action.html.attributes : {})
+        });
+        $element.appendTo(`#control-group-${action.group}`);
+        if (action.text) $element.text(action.name);
+        if (action.click) {
+            $element.on('mousedown', onAction);
+            $element.on('mouseup', onAction);
+        }
     }
     $(document).on('keyup', processKey);
     $(document).on('keydown', processKey);
+
+    const $circle = $('<div>', {
+        id: 'joystick-indicator'
+    });
+    $circle.appendTo('#control-group-move');
+
+    const $cl = $('<div>', {
+        'class': 'motor-indicator-container',
+        id: 'motor-indicator-container-left'
+    });
+    const $cr = $('<div>', {
+        'class': 'motor-indicator-container',
+        id: 'motor-indicator-container-right'
+    });
+
+    const $motorleft = $('<div>', {
+        id: 'motor-indicator-left',
+        'class': 'motor-indicator'
+    });
+
+    const $motorright = $('<div>', {
+        id: 'motor-indicator-right',
+        'class': 'motor-indicator'
+    });
+
+    $motorright.appendTo($cr);
+    $motorleft.appendTo($cl);
+    $cr.appendTo('#control-group-move');
+    $cl.appendTo('#control-group-move');
 }
 
 function onAction(event) {
@@ -76,10 +117,10 @@ function processFrameMeta(data) {
     let rectIndex = 0;
     for (rectIndex = 0; rectIndex < rects.length; rectIndex++) {
         let [x, y, w, h] =  rects[rectIndex];
-        let xOffset = streamOriginX/containerWidth;
-        let yOffset = streamOriginY/containerHeight;
-        x = scale(x, 0, streamWidth, xOffset*100, 100 - (xOffset*100));
-        y = scale(y, 0, streamHeight, yOffset*100, 100 - (yOffset*100));
+        x = scale(x, 0, streamWidth, 0, 100);
+        y = scale(y, 0, streamHeight, 0, 100);
+        w = scale(w, 0, streamWidth, 0, 100);
+        h = scale(h, 0, streamHeight, 0, 100);
         let frame = $(`#stream-annotation-${rectIndex}`);
         // create frames if they don't exist
         if (!frame.length) {
@@ -87,14 +128,14 @@ function processFrameMeta(data) {
                 id: `stream-annotation-${rectIndex}`,
                 'class': 'stream-annotation'
             });
-            streamContainer.append(newFrame);
+            $('.stream-container').append(newFrame);
         }
         frame.removeAttr('style');
         frame.css({
             'left': `${x}%`,
             'top': `${y}%`,
-            'width': `${w/(containerWidth/100)}%`,
-            'height': `${h/(containerHeight/100)}%`,
+            'width': `${w}%`,
+            'height': `${h}%`,
         });
     }
     const nFrames = $('.stream-annotation').length;
@@ -111,7 +152,7 @@ async function processKey(event) {
     });
 
     for (let action of config.controls.actions) {
-        if (!(action.key == event.key || action.key.includes(event.key))) continue;
+        if (!(action.key == event.key || action.key?.includes(event.key))) continue;
         const button = $(`#control-${action.id}`);
         if (event.type == 'keyup') {
             button.removeClass('pressed');

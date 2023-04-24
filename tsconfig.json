@@ -6,7 +6,7 @@
     // It is faster to skip typechecking.
     // Remove if you want ts-node to do typechecking.
     "transpileOnly": true,
-    "esm": "true",
+    "esm": true,
     "files": true,
     
     "compilerOptions": {
@@ -17,5 +17,6 @@
     // typescript options here
     "module": "esnext",
     "target": "es2020",
+    "outDir": "build/"
   }
 }

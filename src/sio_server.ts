@@ -3,7 +3,7 @@ import path from "path";
 import express from "express";
 import logger from "./logger.js";
 import * as io from "socket.io";
-import { dirname, MovementManager, Direction } from "./util.js";
+import { dirname, MovementManager, Direction, ControllerData } from "./util.js";
 
 // MJPEG stream
 // https://www.phind.com/search?cache=1708aa2a-dee9-48b2-87cb-61323a0672ee&init=true
@@ -18,6 +18,8 @@ export class SocketServer {
     botMovement: MovementManager;
     ccc?: (input: string) => void;
     camsocket?: io.Socket;
+    previousSerialCommands ?: string[];
+
 
     constructor(consoleCommandCallback ?: (input: string) => void, port = 8085, httpServer?: http.Server) {
         this.port = port;
@@ -25,7 +27,7 @@ export class SocketServer {
         this.app.use('/', express.static(path.join(dirname(), 'static')))
         this.httpServer = httpServer ?? http.createServer(this.app);
         this.sio = new io.Server(this.httpServer);
-        this.botMovement = new MovementManager();
+        this.botMovement = new MovementManager(100, 80, 35);
         this.ccc = consoleCommandCallback;
 
         this.sio.on('connection', socket => {
@@ -98,6 +100,15 @@ export class SocketServer {
             const command = this.botMovement.getCommand();
             logger.debug(`${dir}: ${command}`);
             this.nspserial.emit('serial-tx', command);
+        });
+
+        socket.on('controller', (data: ControllerData) => {
+            const commands = this.botMovement.processController(data);
+            for (let i = 0; i < commands.length; i++) {
+                if (this.previousSerialCommands && this.previousSerialCommands[i] == commands[i]) continue;
+                this.nspserial.emit('serial-tx', commands[i]);
+            }
+            this.previousSerialCommands = commands;
         });
 
         socket.on('serial-tx', (command) => {

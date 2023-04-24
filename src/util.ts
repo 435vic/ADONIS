@@ -1,14 +1,24 @@
 import url from "url";
 import path from "path";
+import logger from "./logger.js";
 
-export const filename = () => url.fileURLToPath(import.meta.url)
-export const dirname = () => path.dirname(filename())
+export const filename = () => url.fileURLToPath(import.meta.url);
+export const dirname = () => {
+    return path.resolve(path.dirname(filename()), '../src')
+};
 
 interface Directions {
     up: boolean;
     down: boolean;
     left: boolean;
     right: boolean;
+}
+
+export interface ControllerData {
+    joystick: number[];
+    throttle: number;
+    campan: number;
+    leg: number;
 }
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
@@ -45,6 +55,37 @@ export class MovementManager {
         }
     }
 
+    processController(data: ControllerData): string[] {
+        let commands = [];
+        let pleft = 0;
+        let pright = 0;
+
+        const turn = Math.abs(data.joystick[0]) > 10 ? data.joystick[0] : 0;
+
+        pleft += data.throttle;
+        pright += data.throttle;
+
+        pright += (turn/100) * this.tSpeed;
+        pleft -= (turn/100) * this.tSpeed;
+
+        if (pright > 100) pright = 100;
+        else if (pright < -100) pright = -100;
+        if (pleft > 100) pleft = 100;
+        else if (pleft < -100) pleft = -100;
+
+        pright = Math.floor(pright);
+        pleft = Math.floor(pleft);
+
+        // logger.debug();
+        commands.push(`M,${pright},${pleft}`);
+        const camAngle = Math.floor(scale(data.campan > 10 ? data.campan : 0, 0, 100, 85, 155));
+        const legAngle = Math.floor(scale(data.leg, 0, 100, 10, 180));
+        commands.push(`C,${camAngle}`);
+        commands.push(`W,${legAngle}`);
+
+        return commands;
+    }
+
     getCommand() {
         let sideA = 0;
         let sideB = 0;
@@ -66,4 +107,8 @@ export class MovementManager {
 
         return `M,${sideA},${sideB}`
     }
+}
+
+export function scale (n: number, inMin: number, inMax: number, outMin: number, outMax: number) {
+    return (n - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }

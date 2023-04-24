@@ -3,8 +3,7 @@ import path from "path";
 import * as readline from "readline";
 import { ProcessManager } from "./process.js";
 import { SocketServer } from "./sio_server.js";
-import { spawn } from "node:child_process";
-import { dirname } from "./util.js";
+import { dirname, filename } from "./util.js";
 
 const rl = readline.createInterface({
     input: process.stdin,
