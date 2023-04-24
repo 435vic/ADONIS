@@ -35,7 +35,7 @@ export class SocketServer {
             cert
         }, this.app);
         this.sio = new io.Server(this.httpServer);
-        this.botMovement = new MovementManager(100, 80, 35);
+        this.botMovement = new MovementManager(100, 80, 60);
         this.ccc = consoleCommandCallback;
 
         this.sio.on('connection', socket => {
