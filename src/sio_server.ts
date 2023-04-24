@@ -1,5 +1,7 @@
 import http from "http";
+import https from "https";
 import path from "path";
+import fs from "node:fs";
 import express from "express";
 import logger from "./logger.js";
 import * as io from "socket.io";
@@ -8,8 +10,11 @@ import { dirname, MovementManager, Direction, ControllerData } from "./util.js";
 // MJPEG stream
 // https://www.phind.com/search?cache=1708aa2a-dee9-48b2-87cb-61323a0672ee&init=true
 
+const cert = fs.readFileSync(path.join(dirname(), '../ssl', 'ADONIS.crt'));
+const key = fs.readFileSync(path.join(dirname(), '../ssl', 'ADONIS.key'));
+
 export class SocketServer {
-    httpServer: http.Server;
+    httpServer: http.Server | https.Server;
     sio: io.Server;
     app: express.Express;
     port: number;
@@ -21,11 +26,14 @@ export class SocketServer {
     previousSerialCommands ?: string[];
 
 
-    constructor(consoleCommandCallback ?: (input: string) => void, port = 8085, httpServer?: http.Server) {
+    constructor(consoleCommandCallback ?: (input: string) => void, port = 8085, useSSL = false) {
         this.port = port;
         this.app = express();
         this.app.use('/', express.static(path.join(dirname(), 'static')))
-        this.httpServer = httpServer ?? http.createServer(this.app);
+        this.httpServer = !useSSL ? http.createServer(this.app) : https.createServer({
+            key,
+            cert
+        }, this.app);
         this.sio = new io.Server(this.httpServer);
         this.botMovement = new MovementManager(100, 80, 35);
         this.ccc = consoleCommandCallback;

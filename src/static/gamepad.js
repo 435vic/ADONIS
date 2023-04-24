@@ -53,7 +53,7 @@ function processGamepad() {
     // 50n = 1s; 1n = 0.02s
     // 1s = 50n
     // 1/FPS s = ?n
-    const adjRate = (1/GAMEPAD_FPS) * 160;
+    const adjRate = (1/GAMEPAD_FPS) * 100;
     const val = parseInt($leg.val());
     if (legUp.pressed && !legDown.pressed) {
         $leg.val(val+adjRate);
