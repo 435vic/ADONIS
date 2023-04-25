@@ -15,6 +15,9 @@ class Camera:
     def get_frame(self):
         pass
 
+    def close(self):
+        pass
+
 class PiCamera(Camera):
     def setup(self):
         if raspiEnabled:
@@ -30,6 +33,9 @@ class PiCamera(Camera):
         if raspiEnabled:
             return (True, self.camera.capture_array())
         return False, None
+
+    def close(self):
+        self.camera.close()
     
 class Webcam(Camera):
     def setup(self):
@@ -39,3 +45,6 @@ class Webcam(Camera):
     
     def get_frame(self):
         return self.cap.read()
+    
+    def close(self):
+        pass
