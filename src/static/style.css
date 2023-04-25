@@ -74,17 +74,6 @@ select {
     scroll-behavior: auto !important;
   }
 }
-
-/* Style */
-
-body {
-  display: flex;
-  max-height: 100vh;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Roboto', sans-serif;
-}
-
 /*
 
 TODO:
@@ -92,11 +81,45 @@ TODO:
   - keybinds
   - Socket.js implementation
   - Flask stuff
-
 */
 
-.dashboard-main {
+:root {
+  --clr-primary-900: hsl(195, 8%, 15%);
+  --clr-primary-800: hsl(174, 8%, 24%);
+  --clr-primary-600: hsl(172, 8%, 37%);
+  --clr-secondary-800: hsl(38, 52%, 41%);
+  --clr-secondary-700: hsl(38, 54%, 51%);
+  --clr-secondary-500: hsl(31, 62%, 61%);
+  --clr-secondary-300: hsl(39, 51%, 63%);
+  --clr-secondary-200: hsl(39, 51%, 63%);
+  --clr-secondary-100: hsl(30, 59%, 82%);
+  --clr-accent: hsl(73, 55%, 25%);
+}
+
+body {
+  background-color: var(--clr-primary-900);
   width: 100vw;
+  height: 100vh;
+  display: grid;
+  gap: 2rem;
+  place-items: center;
+}
+
+.card-style {
+  background-color: var(--clr-primary-800);
+  border-radius: 20px;
+  text-align: center;
+  padding: 2rem;
+  box-shadow: 3 0.1rem 3rem;
+}
+
+.dash-container {
+  display: flex;
+}
+
+.dash-secondary {
+  height: 100%;
+  width: 16rem;
 }
 
 .controls-container {
@@ -108,15 +131,20 @@ TODO:
 .main-stream-container {
   display: flex;
   justify-content: center;
-  margin: 2rem;
   max-width: 100%;
+  margin: 0 0 2rem 0;
 }
 
 .stream-container {
   position: relative;
   display: inline-block;
-  width: 55rem;
+  max-width: 55rem;
   height: auto;
+}
+
+button.control {
+  background-color: var(--clr-secondary-500);
+  border-radius: 20%;
 }
 
 #main-stream {
@@ -153,7 +181,8 @@ TODO:
 }
 
 .control.pressed {
-  outline: 2px solid red;
+  outline: 2px solid greenyellow;
+  border-radius: 1%;
 }
 
 .control-group {
@@ -168,6 +197,7 @@ TODO:
 #control-group-move {
   position: relative;
 }
+
 
 #joystick-indicator {
   width: 5px;
@@ -213,8 +243,6 @@ TODO:
     ". . . down . . ."
     ". . . down . . .";
 }
-
-
 
 .stream-annotation {
   position: absolute;
