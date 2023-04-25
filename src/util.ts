@@ -78,7 +78,7 @@ export class MovementManager {
 
         // logger.debug();
         commands.push(`M,${pright},${pleft}`);
-        const camAngle = Math.floor(scale(data.campan > 10 ? data.campan : 0, -100, 100, 155, 85));
+        const camAngle = Math.floor(scale(data.campan > 10 ? data.campan : 0, 0, 100, 155, 85));
         const legAngle = Math.floor(scale(data.leg, 0, 100, 10, 180));
         commands.push(`C,${camAngle}`);
         commands.push(`W,${legAngle}`);
