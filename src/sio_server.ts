@@ -75,7 +75,7 @@ export class SocketServer {
             });
 
             const callback = (data: Buffer, annotations?: any) => {
-                this.sio.emit('frame-meta', annotations);
+                if (annotations.motion?.length) this.sio.emit('frame-meta', annotations);
                 res.write('--frame\r\n');
                 res.write('Content-Type: image/jpeg\r\n');
                 res.write(`Content-Length: ${data.length}\r\n\r\n`);

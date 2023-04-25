@@ -64,7 +64,7 @@ function processGamepad() {
     const data = {
         joystick: [Math.floor(pad.axes[0]*100), Math.floor(pad.axes[1]*100)],
         throttle: Math.floor(throttle*200),
-        campan: Math.floor(pad.axes[2]*100),
+        campan: Math.floor($campan.val()),
         leg: parseInt($leg.val())
     };
     if (pad.buttons[0].pressed) console.log(data);
