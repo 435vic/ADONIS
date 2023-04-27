@@ -62,6 +62,7 @@ function processGamepad() {
     }
 
     const data = {
+        controller: !!(navigator.getGamepads()?.length),
         joystick: [Math.floor(pad.axes[0]*100), Math.floor(pad.axes[1]*100)],
         throttle: Math.floor(throttle*200),
         campan: Math.floor($campan.val()),
