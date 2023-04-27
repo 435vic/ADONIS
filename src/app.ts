@@ -31,7 +31,7 @@ const camera_task = new ProcessManager('python', [
 camera_task.on('process-restart', () => {
     server.sio.emit('process-restarted');
 });
-// camera_task.start();
+camera_task.start();
 
 const commands: any = {
     'ping': () => logger.info('[console] pong'),
