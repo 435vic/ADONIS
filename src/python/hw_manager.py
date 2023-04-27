@@ -23,18 +23,20 @@ def connect_error(data):
 
 @sio.on('disconnect-replaced', namespace='/camera')
 def on_replace():
-    print('Client has been replaced. Stopping camera task...')
+    print('Client has been replaced. Disconnecting...')
     camera_worker.stop()
-    raise Exception('Client has been replaced. Did you start another instance of this script?')
-    
+    camera_worker.join()
+    sio.disconnect()
+
 @sio.on('serial-tx', namespace='/serial')
 def on_serial_tx(data):
 	serial_manager.write(data)
 
 sio.connect(f'http://localhost:{args.port}', namespaces=['/camera', '/serial'])
-camera_worker.start()
 serial_manager.start()
 print('Serial manager started')
+camera_worker.start()
+print('Camera manager started')
 input()
 camera_worker.stop()
 camera_worker.join()

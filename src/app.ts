@@ -27,22 +27,37 @@ logger.info('Starting camera task');
 const camera_task = new ProcessManager('python', [
     path.join(dirname(), 'python', 'hw_manager.py'),
     '-f', '15'
-]);
+])
+camera_task.on('process-restart', () => {
+    server.sio.emit('process-restarted');
+});
+// camera_task.start();
 
 const commands: any = {
     'ping': () => logger.info('[console] pong'),
     'python-restart': () => {
         logger.info('[console] restarting python process...');
-        if (!camera_task.process.kill()) {
-            logger.error('Error while killing process');
+        if (!camera_task.running) {
+            logger.info('[console] process is not running. starting...');
+            camera_task.start();
+            return;
+        }
+        camera_task.process?.stdin?.write('\r\n');
+        camera_task.process?.stdin?.end();
+        logger.info('[console] process killed');
+    },
+    'python-kill': () => {
+        logger.info('[console] killing python process...');
+        if (!camera_task.process?.kill()) {
+            logger.error('[console] there was an error killing the python process');
             return;
         }
         logger.info('[console] process killed');
     },
     'quit': () => {
         logger.info('[console] shutting down...');
-        camera_task.process.stdin?.write('\r\n');
-        camera_task.process.stdin?.end();
+        camera_task.process?.stdin?.write('\r\n');
+        camera_task.process?.stdin?.end();
         server.sio.disconnectSockets(true);
         server.sio.close();
         server.httpServer.close();

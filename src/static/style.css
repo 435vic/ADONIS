@@ -97,6 +97,7 @@ TODO:
 }
 
 body {
+  font-family: 'Roboto', sans-serif;
   background-color: var(--clr-primary-900);
   width: 100vw;
   height: 100vh;
@@ -117,9 +118,13 @@ body {
   display: flex;
 }
 
-.dash-secondary {
+.dashboard-secondary {
   height: 100%;
-  width: 16rem;
+  width: 20rem;
+  margin: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .controls-container {
@@ -140,6 +145,18 @@ body {
   display: inline-block;
   max-width: 55rem;
   height: auto;
+}
+
+.admin-buttons-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.admin-button {
+  margin: 0.25rem;
+  padding: 0.3rem;
+  width: 100%;
 }
 
 button.control {
@@ -247,7 +264,88 @@ button.control {
 .stream-annotation {
   position: absolute;
   top: 0px;
-  outline: 2px solid red;
+  border: 2px solid red;
+}
+
+/* Ultrasonic distance indicator */
+
+.ultrasonic-indicator-container {
+  width: 10rem;
+  height: 10rem;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.distance-indicator {
+  position: absolute;
+  border-width: 2px;
+}
+
+.distance-indicator-vertical {
+  height: 50%;
+  width: 1rem;
+  transform: translate(-50%);
+}
+
+.distance-indicator-horizontal {
+  width: 50%;
+  height: 1rem;
+  transform: translate(0, -25%);
+}
+
+.center-indicator-top {
+  border-top-style: solid;
+  top: 0;
+  bottom: 50%;
+  left: 50%;
+}
+
+.center-indicator-bottom {
+  border-bottom-style: solid;
+  top: 50%;
+  bottom: 0;
+  left: 50%;
+}
+
+.center-indicator-left {
+  border-left-style: solid;
+  left: 50%;
+  left: 0;
+  top: 50%;
+}
+
+.center-indicator-right {
+  border-right-style: solid;
+  right: 0;
+  left: 50%;
+  top: 50%;
+}
+
+.distance-indicator-horizontal {
+  width: 50%;
+  height: 17px;
+}
+
+.distance-indicator-vertical::after {
+  content: "";
+  position: absolute;
+  border-left-width: 1px;
+  border-left-style: solid;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.distance-indicator-horizontal::after {
+  content: "";
+  position: absolute;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  bottom: 50%;
+  left: 0;
+  right: 0;
+  transform: translate(0, -25%);
 }
 
 #control-move-up {

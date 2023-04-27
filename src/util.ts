@@ -19,6 +19,7 @@ export interface ControllerData {
     throttle: number;
     campan: number;
     leg: number;
+    controller: boolean;
 }
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
@@ -59,25 +60,27 @@ export class MovementManager {
         let commands = [];
         let pleft = 0;
         let pright = 0;
+        if (data.controller) {
+            const turn = Math.abs(data.joystick[0]) > 10 ? data.joystick[0] : 0;
 
-        const turn = Math.abs(data.joystick[0]) > 10 ? data.joystick[0] : 0;
+            pleft += -data.throttle;
+            pright += -data.throttle;
 
-        pleft += -data.throttle;
-        pright += -data.throttle;
+            pright -= (turn/100) * this.tSpeed;
+            pleft += (turn/100) * this.tSpeed;
 
-        pright -= (turn/100) * this.tSpeed;
-        pleft += (turn/100) * this.tSpeed;
+            if (pright > 100) pright = 100;
+            else if (pright < -100) pright = -100;
+            if (pleft > 100) pleft = 100;
+            else if (pleft < -100) pleft = -100;
 
-        if (pright > 100) pright = 100;
-        else if (pright < -100) pright = -100;
-        if (pleft > 100) pleft = 100;
-        else if (pleft < -100) pleft = -100;
+            pright = Math.floor(pright);
+            pleft = Math.floor(pleft);
 
-        pright = Math.floor(pright);
-        pleft = Math.floor(pleft);
+            commands.push(`M,${pright},${pleft}`);
+        }
 
         // logger.debug();
-        commands.push(`M,${pright},${pleft}`);
         const camAngle = Math.floor(scale(data.campan > 10 ? data.campan : 0, 0, 100, 155, 85));
         const legAngle = Math.floor(scale(data.leg, 0, 100, 10, 180));
         commands.push(`C,${camAngle}`);

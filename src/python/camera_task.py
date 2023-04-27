@@ -18,6 +18,8 @@ class CameraManager(Thread):
     def run(self):
         processor = VideoProcessor()
         self.camera.setup()
+        print('Camera has started')
+        self.socket.emit('camera-start', namespace='/camera')
         while not self.stop_flag.is_set():
             cv2.waitKey(1)
             ret, frame = self.camera.get_frame()

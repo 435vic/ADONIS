@@ -165,6 +165,37 @@ async function processKey(event) {
     }
 }
 
+function onCamSliderChange() {
+    if (!navigator.getGamepads()?.length) return;
+}
+
+function onLegSliderChange() {
+    // possibly change illustration or something
+    if (!navigator.getGamepads()?.length) return;
+}
+
+function onProcessRestartRequest() {
+    socket.emit('console-command', 'python-restart')
+    $btn = $('#button-restart-python');
+    $btn.text('Restarting...');
+    $btn.attr('disabled', true);
+    socket.once('process-restarted', () => {
+        $btn.text('Successfully restarted!');
+        setTimeout(() => {
+            $btn.text('Waiting for camera...');
+            socket.once('camera-start', () => {
+                window.location.reload(false);
+            });
+        }, 1000);
+    });
+}
+
+function onShutdownRequest() {
+    const confirmShutdown = confirm('Are you sure? :/');
+    if (!confirmShutdown) return;
+    socket.emit('console-command', 'quit');
+}
+
 function scale (number, inMin, inMax, outMin, outMax) {
     return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }

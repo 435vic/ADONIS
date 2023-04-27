@@ -46,6 +46,7 @@ export class SocketServer {
         this.nspcam = this.sio.of('/camera');
         this.nspcam.on('connection', (socket) => {
             logger.debug(`Camera socket connection from ${socket.id}`)
+            socket.on('camera-start', () => { this.sio.emit('camera-start') });
             this.camsocket?.emit('disconnect-replaced');
             this.camsocket?.disconnect(true);
             this.camsocket = socket;
@@ -117,6 +118,10 @@ export class SocketServer {
                 this.nspserial.emit('serial-tx', commands[i]);
             }
             this.previousSerialCommands = commands;
+            if (!data.controller) {
+                // if keyboard was used, also transmit movement data from button events
+                this.nspserial.emit('serial-tx', this.botMovement.getCommand());
+            }
         });
 
         socket.on('serial-tx', (command) => {

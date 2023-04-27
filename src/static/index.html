@@ -24,7 +24,18 @@
             </div>
             <div class="controls-container"></div>
         </div>
-        
+        <div class="dashboard-secondary card-style">
+            <div class="ultrasonic-indicator-container">
+                <div id="distance-indicator-top" class="distance-indicator distance-indicator-vertical center-indicator-top"></div>
+                <div id="distance-indicator-bottom" class="distance-indicator distance-indicator-vertical center-indicator-bottom"></div>
+                <div id="distance-indicator-left" class="distance-indicator distance-indicator-horizontal center-indicator-left"></div>
+                <div id="distance-indicator-right" class="distance-indicator distance-indicator-horizontal center-indicator-right"></div>
+            </div>
+            <div class="admin-buttons-container">
+                <button id="button-restart-python" class="admin-button" onclick="onProcessRestartRequest()">Restart Python Process</button>
+                <button id="button-shutdown" class="admin-button" onclick="onShutdownRequest()">Shutdown Server</button>
+            </div>
+        </div>
     </div>
 </body>
 </html>

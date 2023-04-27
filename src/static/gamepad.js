@@ -70,7 +70,6 @@ function processGamepad() {
     if (pad.buttons[0].pressed) console.log(data);
 
     if (socket.connected) {
-        
         socket.emit('controller', data);
     }
 }
