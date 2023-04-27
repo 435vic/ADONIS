@@ -8,6 +8,8 @@ parser.add_argument('-f', '--framerate', nargs='?', default=30)
 parser.add_argument('-p', '--port', nargs='?', default=8085)
 args = parser.parse_args()
 
+print(f'selected framerate: {args.framerate}')
+
 sio = socketio.Client()
 camera_worker = CameraManager(sio, framerate=args.framerate)
 serial_manager = SerialManager(sio)

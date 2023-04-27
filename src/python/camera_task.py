@@ -40,7 +40,7 @@ class CameraManager(Thread):
     
     def stop(self):
         self.stop_flag.set()
-        
+        self.camera.close() 
 
 # parser = argparse.ArgumentParser(description='Manage a webcam and process with OpenCV.')
 # parser.add_argument('-f', '--framerate', nargs='?', default=30)
