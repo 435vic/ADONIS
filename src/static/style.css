@@ -147,6 +147,20 @@ body {
   height: auto;
 }
 
+.motor-sens-indicator-container {
+  border-radius: 8px;
+  border: 2px solid white;
+  margin-top: 1rem;
+  display: grid;
+  place-items: center;
+}
+
+.motor-sens-indicator {
+  display: inline-block;
+  padding: 1rem;
+  color: var(--clr-secondary-100);
+}
+
 .admin-buttons-container {
   display: flex;
   flex-direction: column;
@@ -156,12 +170,12 @@ body {
 .admin-button {
   margin: 0.25rem;
   padding: 0.3rem;
-  width: 100%;
 }
 
 button.control {
   background-color: var(--clr-secondary-500);
   border-radius: 20%;
+  border-color: gray;
 }
 
 #main-stream {

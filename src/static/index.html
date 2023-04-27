@@ -21,7 +21,8 @@
                     <img src="stream" alt="Robot Video Stream" id="main-stream" onerror="this.onerror = null; this.src='res/capybara.jpg'">
                 </div>
             </div>
-            <div class="controls-container"></div>
+            <div class="controls-container">
+            </div>
         </div>
         <div class="dashboard-secondary card-style">
             <div class="ultrasonic-indicator-container">
@@ -33,6 +34,10 @@
             <div class="admin-buttons-container">
                 <button id="button-restart-python" class="admin-button" onclick="onProcessRestartRequest()">Restart Python Process</button>
                 <button id="button-shutdown" class="admin-button" onclick="onShutdownRequest()">Shutdown Server</button>
+            </div>
+            
+            <div class="motor-sens-indicator-container">
+                <span class="motor-sens-indicator">Sensitivity: 100%</span>
             </div>
         </div>
     </div>

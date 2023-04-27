@@ -1,16 +1,22 @@
 const GAMEPAD_FPS = 15;
 
 let gamepadWorker;
+let useGamepad = false;
 
 window.addEventListener('gamepadconnected', (event) => {
     console.log('Gamepad connected.');
     gamepadWorker = setInterval(processGamepad, 1000 / GAMEPAD_FPS);
+    useGamepad = true;
 });
 
 window.addEventListener('gamepaddisconnected', (event) => {
     console.log('Gamepad disconnected.');
     if (gamepadWorker) clearInterval(gamepadWorker);
+    useGamepad = false;
 });
+
+const BUTTON_SENS_UP = 0;
+const BUTTON_SENS_DOWN = 0;
 
 function processGamepad() {
     const gamepads = navigator.getGamepads();
@@ -62,7 +68,7 @@ function processGamepad() {
     }
 
     const data = {
-        controller: !!(navigator.getGamepads()?.length),
+        controller: useGamepad,
         joystick: [Math.floor(pad.axes[0]*100), Math.floor(pad.axes[1]*100)],
         throttle: Math.floor(throttle*200),
         campan: Math.floor($campan.val()),
