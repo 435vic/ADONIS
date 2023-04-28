@@ -87,6 +87,7 @@ function processGamepad() {
         arm: parseInt($arm.val())
     };
     if (pad.buttons[0].pressed) console.log(data);
+    socket.emit('serial-tx', `R,${pad.buttons[1].pressed ? 1 : 0}`);
 
     if (socket.connected) {
         socket.emit('controller', data);
