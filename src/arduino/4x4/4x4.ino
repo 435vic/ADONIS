@@ -1,12 +1,11 @@
 #include <Servo.h>
 #include <NewPing.h>
 
+#define ARMWHEEL 12
 //Motor drivers pins
-#define L_EN 4
 #define L_F 3
 #define L_B 11
 
-#define R_EN 7
 #define R_F 5
 #define R_B 6
 
@@ -25,32 +24,33 @@ NewPing us3(TRIG3, ECHO3, MAX_DISTANCE);
 
 int MR;
 int ML;
+bool ArmWheel;
 String Flag;
 unsigned long previousTimeSample = millis();
 long timeIntervalSample = 1000;
 
 unsigned long previousTimeMotor = millis();
 long timeIntervalMotor = 25;
-int angle1 = 120;
+int angle1 = 0;
 int angle2 = 10;
 
 Servo servoCam;
 Servo servoWheel;
+Servo servoArm;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   servoCam.attach(9);
   servoWheel.attach(10);
-  pinMode(L_EN, OUTPUT);
+  // servoArm.attach(??);
+
   pinMode(L_F, OUTPUT);
   pinMode(L_B, OUTPUT);
-  pinMode(R_EN, OUTPUT);
   pinMode(R_F, OUTPUT);
   pinMode(R_B, OUTPUT);
+  pinMode(ARMWHEEL, OUTPUT);
 
-  digitalWrite(L_EN, HIGH);
-  digitalWrite(R_EN, HIGH);
-  servoCam.write(angle1);
+  servoCam.write(90);
   servoWheel.write(angle2);
 }
 
@@ -80,7 +80,7 @@ void loop() {
     delay(25);
     Serial.println(input);
     Serial.println(ValueA);*/
-    if(/*currentTime - previousTimeMotor > timeIntervalMotor &&*/ MsgFlag == "C" && ValueA > 84 && ValueA < 156 && ValueA != angle1) {
+    if(/*currentTime - previousTimeMotor > timeIntervalMotor &&*/ MsgFlag == "C" && ValueA >= 0 && ValueA <= 180 && ValueA != angle1) {
       servoCam.write(ValueA);
       delay(25);
       angle1 = ValueA;
@@ -89,6 +89,9 @@ void loop() {
       servoWheel.write(ValueA);
       angle2 = ValueA;
       delay(25);
+    } if (MsgFlag == "R") {
+      Flag = MsgFlag;
+      ArmWheel = ValueA == 1;
     }
   }//85, 115, 155
   if(Flag == "M" || Flag == "S"){
@@ -99,6 +102,8 @@ void loop() {
       Serial.print(ML);
       Serial.println();*/
       Move(ML, MR);
+  } else if (Flag == "R") {
+    digitalWrite(ARMWHEEL, ArmWheel ? HIGH : LOW);
   }
     // Do something with the parsed values
   if(currentTime - previousTimeSample > timeIntervalSample) {

@@ -52,6 +52,23 @@
                 }
             },
             {
+                "name": "Support Arm",
+                "id": "support-arm",
+                "group": "slider",
+                "text": true,
+                "click": false,
+                "html": {
+                    "tag": "input",
+                    "attributes": {
+                        "type": "range",
+                        "min": "0",
+                        "max": "100",
+                        "value": "0",
+                        "orient": "vertical"
+                    }
+                }
+            },
+            {
                 "name": "Camera",
                 "id": "camera-pan",
                 "group": "slider",

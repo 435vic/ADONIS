@@ -26,7 +26,7 @@ await server.start();
 logger.info('Starting camera task');
 const camera_task = new ProcessManager('python', [
     path.join(dirname(), 'python', 'hw_manager.py'),
-    '-f', '12'
+    '-f', '8'
 ])
 camera_task.on('process-restart', () => {
     server.sio.emit('process-restarted');

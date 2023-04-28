@@ -9,8 +9,10 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
     <script src="lib/socket.io.min.js"></script>
     <script src="lib/jquery-3.6.4.min.js"></script>
+    <script src="lib/jsQR.js"></script>
     <script src="main.js"></script>
     <script src="gamepad.js"></script>
+    <script src="qr.js"></script>
     <title>Interface</title>
 </head>
 <body>
@@ -36,8 +38,13 @@
                 <button id="button-shutdown" class="admin-button" onclick="onShutdownRequest()">Shutdown Server</button>
             </div>
             
-            <div class="motor-sens-indicator-container">
+            <!-- <div class="motor-sens-indicator-container">
                 <span class="motor-sens-indicator">Sensitivity: 100%</span>
+            </div> -->
+
+            <div class="qr-notif-container">
+                <p>Last read QR code:</p>
+                <p id="last-qr-code"></p>
             </div>
         </div>
     </div>

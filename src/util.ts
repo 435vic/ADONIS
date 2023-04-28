@@ -15,11 +15,12 @@ interface Directions {
 }
 
 export interface ControllerData {
+    controller: boolean;
     joystick: number[];
     throttle: number;
     campan: number;
     leg: number;
-    controller: boolean;
+    arm: number;
 }
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
@@ -83,8 +84,10 @@ export class MovementManager {
         // logger.debug(commands);
         const camAngle = Math.floor(scale(data.campan > 10 ? data.campan : 0, 0, 100, 155, 85));
         const legAngle = Math.floor(scale(data.leg, 0, 100, 10, 180));
+        const armAngle = data.arm;
         commands.push(`C,${camAngle}`);
         commands.push(`W,${legAngle}`);
+        commands.push(`K,${armAngle}`);
 
         return commands;
     }

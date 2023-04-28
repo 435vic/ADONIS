@@ -56,15 +56,26 @@ function processGamepad() {
     const $leg = $('#control-support-leg');
     const legUp = pad.buttons[4];
     const legDown = pad.buttons[5];
+
+    const $arm = $('#control-support-arm');
+    const armUp = pad.buttons[2];
+    const armDown = pad.buttons[3]
     // 50n = 1s; 1n = 0.02s
     // 1s = 50n
     // 1/FPS s = ?n
     const adjRate = (1/GAMEPAD_FPS) * 100;
-    const val = parseInt($leg.val());
+    const legVal = parseInt($leg.val());
+    const armVal = parseInt($arm.val());
     if (legUp.pressed && !legDown.pressed) {
-        $leg.val(val+adjRate);
+        $leg.val(legVal+adjRate);
     } else if (legDown.pressed && !legUp.pressed) {
-        $leg.val(val-adjRate);
+        $leg.val(legVal-adjRate);
+    }
+
+    if (armUp.pressed && !armDown.pressed) {
+        $arm.val(armVal+adjRate);
+    } else if (armDown.pressed && !armUp.pressed) {
+        $arm.val(armVal-adjRate);
     }
 
     const data = {
@@ -72,7 +83,8 @@ function processGamepad() {
         joystick: [Math.floor(pad.axes[0]*100), Math.floor(pad.axes[1]*100)],
         throttle: Math.floor(throttle*200),
         campan: Math.floor($campan.val()),
-        leg: parseInt($leg.val())
+        leg: parseInt($leg.val()),
+        arm: parseInt($arm.val())
     };
     if (pad.buttons[0].pressed) console.log(data);
 

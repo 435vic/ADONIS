@@ -161,6 +161,13 @@ body {
   color: var(--clr-secondary-100);
 }
 
+.qr-notif-container {
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  color: white;
+}
+
 .admin-buttons-container {
   display: flex;
   flex-direction: column;
@@ -251,7 +258,7 @@ button.control {
   margin: 0rem 1rem;
 }
 
-#control-support-leg {
+#control-support-leg, #control-support-arm {
   height: 6rem;
 }
 
@@ -280,7 +287,6 @@ button.control {
   top: 0px;
   border: 2px solid red;
 }
-
 /* Ultrasonic distance indicator */
 
 .ultrasonic-indicator-container {

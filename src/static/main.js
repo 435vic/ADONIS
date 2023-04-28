@@ -2,6 +2,8 @@ let stream, streamContainer;
 // stream dimensions
 let streamWidth, streamHeight, containerWidth, containerHeight, streamOriginX, streamOriginY;
 let _settings;
+
+let qrCodeTask;
 // Socket
 const socket = io();
 
@@ -21,6 +23,8 @@ $(document).ready(() => {
     });
 
     socket.on('frame-meta', processFrameMeta);
+
+    qrCodeTask = setInterval(detectCodes, 1000);
 });
 
 function getStreamDimensions() {
