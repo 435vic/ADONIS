@@ -22,6 +22,10 @@ $(document).ready(() => {
         callback('pong')
     });
 
+    socket.on('serial-rx', (data) => {
+        console.log(data);
+    });
+
     socket.on('frame-meta', processFrameMeta);
 
     qrCodeTask = setInterval(detectCodes, 1000);

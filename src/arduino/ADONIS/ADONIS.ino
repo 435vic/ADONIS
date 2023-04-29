@@ -1,4 +1,6 @@
 #include <Servo.h>
+#include <DHT.h>
+#include <DHT_U.h>
 
 #define LEFT_FWD 3
 #define LEFT_BACK 11
@@ -14,6 +16,9 @@
 #define BACK_SERVO_END 180
 
 #define GAS_SENSOR A0
+#define DHTPIN 2
+
+DHT_Unified dht(DHTPIN, DHT22);
 
 Servo backServo;
 Servo frontServo;
@@ -43,6 +48,7 @@ void setup() {
     pinMode(ARM_WHEEL_MOTOR, OUTPUT);
 
     pinMode(GAS_SENSOR, INPUT);
+    dht.begin();
 
     frontServo.write(frontServoSpeed);
     backServo.write(backServoAngle);
@@ -74,8 +80,12 @@ void loop() {
     backServo.write(backServoAngle);
     
     if (currentTime - lastPollTime > 500) {
+        sensors_event_t event;
+        dht.temperature().getEvent(&event);
+        Serial.print("T,");
+        Serial.println(event.temperature);
         gasLevel = analogRead(GAS_SENSOR);
-        Serial.print("Gas level: ");
+        Serial.print("G,");
         Serial.println(gasLevel);
         lastPollTime = currentTime;
     }
