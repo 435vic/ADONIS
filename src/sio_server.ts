@@ -56,7 +56,7 @@ export class SocketServer {
         this.nspserial.on('connection', (socket) => {
             logger.debug(`Serial socket connection from ${socket.id}`);
             socket.on('serial-rx', data => {
-                logger.debug(`serial: ${data}`);
+                logger.trace(`serial: ${data}`);
             });
         });
         
