@@ -69,7 +69,7 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
     cv2.destroyWindow(window_name)
 
 
-IP = 'localhost'
+IP = '192.168.0.196'
 
 save_frame_camera_key(f'http://{IP}:8085/stream', 'data/temp', 'camera_capture')
 

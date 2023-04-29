@@ -31,7 +31,7 @@ long timeIntervalSample = 1000;
 
 unsigned long previousTimeMotor = millis();
 long timeIntervalMotor = 25;
-int angle1 = 0;
+int angle1 = 90;
 int angle2 = 10;
 
 Servo servoCam;
@@ -80,47 +80,36 @@ void loop() {
     delay(25);
     Serial.println(input);
     Serial.println(ValueA);*/
-    if(/*currentTime - previousTimeMotor > timeIntervalMotor &&*/ MsgFlag == "C" && ValueA >= 0 && ValueA <= 180 && ValueA != angle1) {
+    if(MsgFlag == "C" && ValueA >= 0 && ValueA <= 180 && ValueA != angle1) {
       servoCam.write(ValueA);
-      delay(25);
       angle1 = ValueA;
-    }
-    if(/*currentTime - previousTimeMotor > timeIntervalMotor &&*/ MsgFlag == "W" && ValueA > 9 && ValueA < 181 && ValueA != angle2) {
-      servoWheel.write(ValueA);
+    } else if(MsgFlag == "W" && ValueA > 9 && ValueA < 181 && ValueA != angle2) {
       angle2 = ValueA;
-      delay(25);
-    } if (MsgFlag == "R") {
+    } else if (MsgFlag == "R") {
       Flag = MsgFlag;
-      ArmWheel = ValueA == 1;
+      digitalWrite(ARMWHEEL, ValueA ? HIGH : LOW);
     }
   }//85, 115, 155
   if(Flag == "M" || Flag == "S"){
-      /*Serial.print("MR:");
-      Serial.print(MR);
-      Serial.println();
-      Serial.print(" ML:");
-      Serial.print(ML);
-      Serial.println();*/
       Move(ML, MR);
-  } else if (Flag == "R") {
-    digitalWrite(ARMWHEEL, ArmWheel ? HIGH : LOW);
   }
-    // Do something with the parsed values
-  if(currentTime - previousTimeSample > timeIntervalSample) {
-    previousTimeSample = currentTime;
-    float dist1 = us1.ping_cm(); // Send ping, get distance in centimeters.
-    float dist2 = us2.ping_cm(); // Send ping, get distance in centimeters.
-    float dist3 = us3.ping_cm(); // Send ping, get distance in centimeters.
-    //Sents values back to the rasp
 
-    /*Serial.print("US");
-    Serial.print(",");
-    Serial.print(dist1);
-    Serial.print(",");
-    Serial.print(dist2);
-    Serial.print(",");
-    Serial.println(dist3);*/
-  }
+  servoWheel.write(angle2);
+    // Do something with the parsed values
+//  if(currentTime - previousTimeSample > timeIntervalSample) {
+//    previousTimeSample = currentTime;
+//    float dist1 = us1.ping_cm(); // Send ping, get distance in centimeters.
+//    float dist2 = us2.ping_cm(); // Send ping, get distance in centimeters.
+//    float dist3 = us3.ping_cm(); // Send ping, get distance in centimeters.
+//    //Sents values back to the rasp
+//    /*Serial.print("US");
+//    Serial.print(",");
+//    Serial.print(dist1);
+//    Serial.print(",");
+//    Serial.print(dist2);
+//    Serial.print(",");
+//    Serial.println(dist3);*/
+//  }
 }
 
 
